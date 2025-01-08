@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="col-md-6 mx-auto">
+    <div class="card form-container">
+        <div class="card-body">
+            <h4 class="card-title">Add Category</h4>
+            <p class="card-description">
+                Fill in the details to add a new category.
+            </p>
+            <form class="forms-sample" action="{% url 'AdminApp:add_category' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" name="name" class="form-control" id="categoryName" placeholder="Category Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryDescription">Description</label>
+                    <textarea name="description" class="form-control" id="categoryDescription" rows="4" placeholder="Category Description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="categoryImage">Image Upload</label>
+                    <input type="file" name="image" class="file-upload-default" id="categoryImage" required style="display: none;">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" id="fileUploadInfo" disabled placeholder="Upload Image">
+                        <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary" type="button" id="uploadButton">Upload</button>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light" type="button" onclick="history.back();">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+        {% if i.tags == 'success' %}
+            <script>
+                swal('{{i}}', '', 'success');
+            </script>
+        {% elif i.tags == 'error' %}
+            <script>
+                swal('{{i}}', '', 'error');
+            </script>
+        {% elif i.tags == 'warning' %}
+            <script>
+                swal('{{i}}', '', 'warning');
+            </script>
+        {% else %}
+            <script>
+                swal('{{i}}', '', 'info');
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<script>
+    document.getElementById('uploadButton').addEventListener('click', function() {
+        document.getElementById('categoryImage').click();  // Trigger the file input
+    });
+
+    document.getElementById('categoryImage').addEventListener('change', function() {
+        var fileName = this.value.split('\\').pop();  // Get the file name
+        document.getElementById('fileUploadInfo').value = fileName;  // Set the file name to the input field
+    });
+</script>
+{% endblock %}

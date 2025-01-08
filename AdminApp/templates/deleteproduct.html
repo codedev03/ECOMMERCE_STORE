@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="col-md-6 mx-auto">
+    <div class="card form-container">
+        <div class="card-body">
+            <h4 class="card-title">Confirm Deletion</h4>
+            <p>Are you sure you want to delete the product "{{ product.name }}"?</p>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{% url 'AdminApp:displayproducts' %}" class="btn btn-light"> Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+        <script>
+            swal('{{ i }}', '', '{{ i.tags }}');
+        </script>
+    {% endfor %}
+{% endif %}
+{% endblock %}

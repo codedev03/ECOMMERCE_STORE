@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>LUJO - Admin Login</title>
+  <link rel="stylesheet" href="{% static 'login/style.css' %}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<body>
+    <section class="container">
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <a class="navbar-brand brand-logo mr-5" href="{% url 'AdminApp:index' %}"><img src="{% static 'assets/images/Lujo.svg' %}" class="mr-2" style="width: 90px; height: 60px;" alt="logo"/></a>
+            </div>
+        </nav>
+        <div class="login-container">
+            <div class="circle circle-one"></div>
+            <div class="form-container">
+                <!-- <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" /> -->
+                <img src="{% static 'assets/illustration.png' %}" alt="illustration" class="illustration" />
+                <h1 class="opacity">LOGIN</h1>
+                {% if messages %}
+                    <div class="alert">
+                        {% for message in messages %}
+                            <div class="alert-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form method="POST" action="{% url 'AdminApp:admin_l' %}">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="USERNAME" required />
+                    <input type="password" name="password" placeholder="PASSWORD" required />
+                    <button type="submit" class="opacity">SUBMIT</button>
+                </form>
+                <div class="register-forget opacity">
+                    <!-- <a href="">REGISTER</a>
+                    <a href="">FORGOT PASSWORD</a> -->
+                </div>
+            </div>
+            <div class="circle circle-two"></div>
+        </div>
+        <div class="theme-btn-container"></div>
+    </section>
+</body>
+<!-- partial -->
+<script  src="{% static 'login/script.js' %}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+        <script>
+            swal('{{ i }}', '', '{{ i.tags }}');
+        </script>
+    {% endfor %}
+{% endif %}
+</body>
+</html>
