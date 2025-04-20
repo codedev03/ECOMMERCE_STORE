@@ -1,0 +1,53 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Order Details</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Place</th>  <!-- Add Place column -->
+                    <th>Address</th>
+                    <th>Mobile</th>
+                    <th>Total Price</th>
+                    <th>Message</th>
+                    <th class="text-center">Actions</th> <!-- Optional: Add actions if needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.FirstName }}</td>
+                    <td>{{ order.LastName }}</td>
+                    <td>{{ order.Email }}</td>
+                    <td>{{ order.Place }}</td>  <!-- Render Place here -->
+                    <td>{{ order.Address }}</td>
+                    <td>{{ order.Mobile }}</td>
+                    <td>Rs. {{ order.TotalPrice|floatformat:2 }}</td>
+                    <td>{{ order.Message }}</td>
+                    <td class="text-center">
+                        <!-- Optional: Add action buttons if needed -->
+                        <a href="{% url 'AdminApp:delete_order' order.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this order?');">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center">No orders found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, category_view, add_category_view, display_categories, edit_category, delete_category, add_product, display_products, edit_product, delete_product, admin_login, admin_l, admin_logout, display_contact_details, delete_contact, display_categories_with_alert
+from .views import index, category_view, add_category_view, display_categories, edit_category, delete_category, add_product, display_products, edit_product, delete_product, admin_login, admin_l, admin_logout, display_contact_details, delete_contact, display_categories_with_alert, order_details, delete_order, display_cart_items, remove_from_cart
 # from . import views
 app_name = 'AdminApp'
 urlpatterns = [
@@ -19,4 +19,8 @@ urlpatterns = [
     path('contact/details/', display_contact_details, name='display_contact_details'),
     path('contact/delete/<int:id>/', delete_contact, name='delete_contact'),  # Ensure this line exists
     path('display-categories-with-alert/', display_categories_with_alert, name='display_categories_with_alert'),
+    path('order_details/', order_details, name='order_details'),
+    path('delete-order/<int:order_id>/', delete_order, name='delete_order'),  # Add delete order URL
+    path('cart-items/', display_cart_items, name='display_cart_items'),
+    path('remove-from-cart/<int:item_id>/', remove_from_cart, name='remove_from_cart'),
 ]

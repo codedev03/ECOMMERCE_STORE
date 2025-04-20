@@ -401,7 +401,6 @@ def singleproduct(request, id):
     return render(request, "singleproduct.html", context)
 
 def user_register(request):
-    logger.debug("Registration request received.")
     if request.method == "POST":
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -434,12 +433,11 @@ def user_register(request):
         )
         try:
             user.save()
-            logger.debug("User saved successfully!")
+            messages.success(request, "Registration successful!")
+            return redirect('WebApp:login')
         except Exception as e:
             logger.error(f"Error saving user: {e}")
             messages.error(request, "An error occurred during registration.")
             return redirect('WebApp:register')
-        messages.success(request, "Registration successful!")
-        return redirect('WebApp:login')  # Redirect to login page after successful registration
 
     return render(request, "user_reg.html")  # Render the registration page for GET requests

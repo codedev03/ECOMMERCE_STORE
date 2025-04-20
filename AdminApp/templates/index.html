@@ -374,6 +374,32 @@
               </ul>
             </div>
           </li>
+          <!-- order details  -->
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="fas fa-folder menu-icon"></i>
+              <span class="menu-title">Order Details</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'AdminApp:order_details' %}">Orders from Customers</a></li>
+              </ul>
+            </div>
+          </li>
+          <!-- Cart Details  -->
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="fas fa-folder menu-icon"></i>
+              <span class="menu-title">Cart Details</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'AdminApp:display_cart_items' %}">View Cart Items</a></li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </nav>
       <!-- partial -->

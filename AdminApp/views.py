@@ -1,11 +1,39 @@
 from django.shortcuts import render, redirect
 from .models import Category, Product
-from WebApp.models import ContactDb
+from WebApp.models import ContactDb, OrderDb, CartDb
 from django.core.files.storage import default_storage
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime
+
+def remove_from_cart(request, item_id):
+    try:
+        item = CartDb.objects.get(id=item_id)
+        item.delete()
+        messages.success(request, "Item removed from cart successfully!")
+    except CartDb.DoesNotExist:
+        messages.error(request, "Item not found in cart.")
+    
+    return redirect("AdminApp:display_cart") 
+
+def display_cart_items(request):
+    if 'username' not in request.session:
+        messages.warning(request, "You need to be logged in to view cart items.")
+        return redirect('WebApp:login')  # Redirect to the login page
+
+    # Fetch all cart items
+    cart_items = CartDb.objects.all()  # Get all cart items for all users
+    cart_count = cart_items.count()  # Count the number of items in the cart
+
+    if cart_count == 0:
+        messages.info(request, "No items in any cart.")
+    
+    return render(request, 'display_cart.html', {
+        'cart_items': cart_items,
+        'cart_count': cart_count,
+    })
+
 
 def delete_contact(request, id):
     contact = ContactDb.objects.get(id=id)
@@ -18,8 +46,8 @@ def display_contact_details(request):
     return render(request, 'contact_details.html', {'contacts': contacts})
 
 def admin_logout(request):
-    del request.session['username']
-    # del request.session['password']
+    # Clear the entire session
+    request.session.flush()  # This will clear all session data
     messages.success(request, "You have been logged out successfully.")
     return redirect('AdminApp:admin_login')
 
@@ -51,6 +79,21 @@ def admin_l(request):
     else:
         return redirect('AdminApp:admin_login')
 
+def order_details(request):
+    # Fetch all orders
+    orders = OrderDb.objects.all()  # You can filter this based on your requirements
+    return render(request, 'order_details.html', {'orders': orders})
+
+def delete_order(request, order_id):
+    try:
+        order = OrderDb.objects.get(id=order_id)
+        order.delete()  # Delete the order
+        messages.success(request, 'Order deleted successfully!')  # Add success message
+    except OrderDb.DoesNotExist:
+        messages.error(request, 'Order not found.')
+    return redirect('AdminApp:order_details')  # Redirect to the order details page
+
+
 def index(request):
     # Check if the user is logged in and display a welcome message
     if 'username' in request.session:
@@ -58,6 +101,7 @@ def index(request):
     
     categories = Category.objects.all()  # Get all categories
     products = Product.objects.count()  # Get the count of products
+    orders = OrderDb.objects.all()
     x = datetime.now()
 
     # Generate date ranges
@@ -72,6 +116,7 @@ def index(request):
         'categories': categories,  # Pass the actual category objects
         'category_count': categories.count(),  # Pass the count separately
         'products': products,
+        'orders': orders, 
         'x': x,
         'date_ranges': date_ranges,
         'is_category_page': True,
